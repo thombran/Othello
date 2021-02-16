@@ -2,7 +2,7 @@
 
 /**
  * Othello game
- * Author(s): Your Name(s)
+ * Author(s): Brandon Thomas
  */
 
 class Othello {
@@ -67,8 +67,20 @@ class Othello {
 
   	// Initializes the board with start configuration of discs (as per project specs)
 	initializeBoard() {
-
-		// TO DO: COMPLETE THIS METHOD
+		console.log(this.size);
+		for (let row = 0; row < this.size; row++) {
+			for (let col = 0; col < this.size; col++) {
+				if ((row == ((this.size / 2) -1) && col == (this.size / 2) - 1 || (row == this.size / 2) && col == this.size / 2)) {
+					this.board[row][col] = Othello.BLACK;
+				}
+				else if (((row == this.size / 2) && col == (this.size / 2) - 1) || row == (this.size / 2) -1 && col == this.size / 2) {
+					this.board[row][col] = Othello.WHITE;
+				}
+				else {
+					this.board[row][col] = Othello.EMPTY;
+				}
+			}
+		}
 
   	}
 
