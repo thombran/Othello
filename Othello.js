@@ -86,7 +86,7 @@ class Othello {
 	isValidMove(row, col) {
 		return this.isValidMoveForDisc(row, col, this.disc);
 	}
-
+	/*
 	checkNorth(row, col, disc) {
 		var numDisc = 0;
 		var numNotDisc = 0;
@@ -179,10 +179,112 @@ class Othello {
 		return false;
 	}
 
+	checkNortheast(row, col, disc) {
+		var numDisc = 0;
+		var numNotDisc = 0;
+		var numEmpty = 0;
+
+		let j = col + 1
+		for (let i = row - 1; i >= 0; i--) {
+			if (i < 0 || j == size)
+				break;
+			if (this.board[i][j] === disc) {
+				numDisc++;
+				if (numDisc > 0 && numNotDisc == 0 || numEmpty > 0)
+					return false;
+				if (numNotDisc > 0 && numDisc > 0)
+					return true;
+			}
+			if (this.board[i][j] != disc && board[i][j] !== Othello.EMPTY)
+				numNotDisc++;
+			if (board[i][j] === Othello.EMPTY)
+				numEmpty++;
+			j++;
+		}
+		return false;
+	}
+
+	checkSouthwest(row, col, disc) {
+		var numDisc = 0;
+		var numNotDisc = 0;
+		var numEmpty = 0;
+
+		let j = col - 1
+		for (let i = row + 1; i < size; i++) {
+			if (i == this.size || j < 0)
+				break;
+			if (this.board[i][j] === disc) {
+				numDisc++;
+				if (numDisc > 0 && numNotDisc == 0 || numEmpty > 0)
+					return false;
+				if (numNotDisc > 0 && numDisc > 0)
+					return true;
+			}
+			if (this.board[i][j] != disc && board[i][j] !== Othello.EMPTY)
+				numNotDisc++;
+			if (board[i][j] === Othello.EMPTY)
+				numEmpty++;
+			j--;
+		}
+		return false;
+	}
+
+	checkSoutheast(row, col, disc) {
+		var numDisc = 0;
+		var numNotDisc = 0;
+		var numEmpty = 0;
+
+		let j = col + 1
+		for (let i = row + 1; i < size; i++) {
+			if (i == size || j == size)
+				break;
+			if (this.board[i][j] === disc) {
+				numDisc++;
+				if (numDisc > 0 && numNotDisc == 0 || numEmpty > 0)
+					return false;
+				if (numNotDisc > 0 && numDisc > 0)
+					return true;
+			}
+			if (this.board[i][j] != disc && board[i][j] !== Othello.EMPTY)
+				numNotDisc++;
+			if (board[i][j] === Othello.EMPTY)
+				numEmpty++;
+			j++;
+		}
+		return false;
+	}
+
+	checkNorthwest(row, col, disc) {
+		var numDisc = 0;
+		var numNotDisc = 0;
+		var numEmpty = 0;
+
+		let j = col - 1
+		for (let i = row - 1; i >= 0; i--) {
+			if (i < 0 || j < 0)
+				break;
+			if (this.board[i][j] === disc) {
+				numDisc++;
+				if (numDisc > 0 && numNotDisc == 0 || numEmpty > 0)
+					return false;
+				if (numNotDisc > 0 && numDisc > 0)
+					return true;
+			}
+			if (this.board[i][j] != disc && board[i][j] !== Othello.EMPTY)
+				numNotDisc++;
+			if (board[i][j] === Othello.EMPTY)
+				numEmpty++;
+			j--;
+		}
+		return false;
+	}
+	
 	// Returns true if placing the specified disc at row,col is valid; else returns false
 	isValidMoveForDisc(row, col, disc) {
-		// TO DO: COMPLETE THIS PART OF THE METHOD
-
+		if (this.checkNorth || this.checkSouth || this.checkEast || this.checkWest ||
+			this.checkNortheast || this.checkNorthwest || this.checkSoutheast || this.checkSouthwest) {
+				return true;
+			}
 		// DO NOT DELETE - if control reaches this statement, then it is not a valid move
 		return false; // not a valid move
 	}
@@ -193,17 +295,98 @@ class Othello {
 			return;
 		}
 
+		if (checkWest(row, col, this.disc)) {
+			let colPos = col - 1;
+			//Make sure current pos it neither curr player disc color, nor empty spot (no discs)
+			while (this.board[row][colPos] != this.disc && this.board[row][colPos] != Othello.EMPTY && colPos >= 0) {
+				this.board[row][colPos] = this.disc;
+				colPos--;
+			}
+		}
+	
+		//Same as above, but for E direction
+		if (checkEast(row, col, this.disc)) {
+			let colPos = col + 1;
+			while (this.board[row][colPos] != this.disc && this.board[row][colPos] != Othello.EMPTY && colPos < size) {
+				this.board[row][colPos] = this.disc;
+				colPos++;
+			}
+		}
+	
+		//Same as above, but for S direction
+		if (checkSouth(row, col, this.disc)) {
+			let rowPos = row - 1;
+			while (this.board[rowPos][col] != this.disc && this.board[rowPos][col] != Othello.EMPTY && rowPos >= 0) {
+				this.board[rowPos][col] = this.disc;
+				rowPos--;
+			}
+		}
+	
+		//Same as above, but for N direction
+		if (checkNorth(row, col, this.disc)) {
+			let rowPos = row + 1;
+			while (this.board[rowPos][col] != this.disc&& this.board[rowPos][col] != Othello.EMPTY && rowPos < size) {
+				this.board[rowPos][col] = this.disc;
+				rowPos++;
+			}
+		}
+	
+		//Same as above, but for NE direction
+		if (checkNortheast(row, col, this.disc)) {
+			let diagPosRow = row - 1;
+			let diagPosCol = col + 1;
+			while (this.board[diagPosRow][diagPosCol] != this.disc && this.board[diagPosRow][diagPosCol] != Othello.EMPTY && diagPosRow >= 0 &&
+				   diagPosCol < size) {
+				this.board[diagPosRow][diagPosCol] = this.disc;
+				diagPosRow--;
+				diagPosCol++;
+			}
+		}
+	
+		//Same as above, but for SW direction
+		if (checkSouthwest(row, col, this.disc)) {
+			let diagPosRow = row + 1;
+			let diagPosCol = col - 1;
+			while (this.board[diagPosRow][diagPosCol] != this.disc && this.board[diagPosRow][diagPosCol] != Othello.EMPTY&& diagPosRow < size &&
+				   diagPosCol >= 0) {
+				this.board[diagPosRow][diagPosCol] = this.disc;
+				diagPosRow++;
+				diagPosCol--;
+			}
+		}
+	
+		//Same as above, but for SE direction
+		if (checkSoutheast(row, col, this.disc)) {
+			let diagPosRow = row + 1;
+			let diagPosCol = col + 1;
+			while (this.board[diagPosRow][diagPosCol] != this.disc && this.board[diagPosRow][diagPosCol] != Othello.EMPTY && diagPosRow < size &&
+				   diagPosCol < size) {
+				this.board[diagPosRow][diagPosCol] = this.disc;
+				diagPosRow++;
+				diagPosCol++;
+			}
+		}
+	
+		//Same as above, but for NW direction
+		if (checkNorthwest(row, col, this.disc)) {
+			let diagPosRow = row - 1;
+			let diagPosCol = col - 1;
+			while (this.board[diagPosRow][diagPosCol] != this.disc && this.board[diagPosRow][diagPosCol] != Othello.EMPTY && diagPosRow >= 0 && diagPosCol >= 0) {
+				this.board[diagPosRow][diagPosCol] = this.disc;
+				diagPosRow--;
+				diagPosCol--;
+			}
+		}
+
 		// place the current player's disc at row,col
 		this.board[row][col] = this.disc;
 
-
-		// TO DO: COMPLETE THIS PART OF THE METHOD
 		// DO NOT DELETE - prepares for next turn if game is not over
 		if (!this.isGameOver()) {
 			this.prepareNextTurn();
 		}
 	}
-
+	*/
 	// Sets turn and disc information for next player
 	prepareNextTurn() {
 		if (this.turn === 1) {
@@ -225,8 +408,15 @@ class Othello {
 
 	// Returns true if a valid move for the specified disc is available; else returns false
 	isValidMoveAvailableForDisc(disc) {
-		// TO DO: COMPLETE THIS PART OF THE METHOD
-
+		for (let i = 0; i < this.size; i++) {
+			for (let j = 0; j < this.size; j++) {
+				if (board[i][j] === Othello.EMPTY) {
+					if (this.isValidMoveForDisc(i, j, disc)) {
+						return true;
+					}
+				}
+			}
+		}
 		// DO NOT DELETE - if control reaches this statement, then a valid move is not available
 		return false; // not a valid move
 	}
